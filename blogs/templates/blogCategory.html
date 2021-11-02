@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}: Category{% endblock title %}
+{% block content %}
+
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
+      aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    {% for last in lasted %}
+    {% if forloop.first %}
+    <div class="carousel-item active">
+      {% else %}
+      <div class="carousel-item">
+        {% endif %}
+        {% if last.coverImage %}
+        <img src="{{last.coverImage.url}}">
+        {% else %}
+        <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"
+          preserveAspectRatio="xMidYMid slice" focusable="false">
+          <rect width="100%" height="100%" fill="#777" />
+        </svg>
+        {% endif %}
+        <div class="container">
+          <div class="carousel-caption text-start">
+            <h1>{{last.name}}</h1>
+            <p>{{last.description}}</p>
+            <p><a class="btn btn-lg btn-primary" href="{% url 'blogContent' last.id %}">อ่านต่อ</a></p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+
+  <div class="album py-5 bg-light">
+    <div class="container">
+      <div class="row mb-2">
+        {% for blog in blogs %}
+        <div class="col-md-6">
+          <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-300 position-relative">
+            <div class="col p-4 d-flex flex-column position-static">
+              <strong class="d-inline-block mb-2 text-primary" style="text-align:right">{{blog.category}}</strong>
+              {% if blog.cover %}
+              <img src="{{blog.coverImage.url}}">
+              {% endif %}
+              <h3 class="mb-0">{{blog.name}}</h3>
+              <small class="text-muted"><i class="fa fa-eye" aria-hidden="true"></i> {{blog.views | intcomma}}</small>
+              <div class="mb-1 text-muted">{{blog.createdDate}}</div>
+              <p class="card-text mb-auto">{{blog.description}}</p>
+              <a href="{% url 'blogContent' blog.id %}" class="stretched-link">อ่านต่อ</a>
+              <button type="button" class="btn btn-default" aria-label="Left Align">
+                <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
+              </button>
+              <!-- <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                {% comment %} <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button> {% endcomment %}
+              </div>
+              <small class="text-muted"><i class="fa fa-eye" aria-hidden="true"></i> {{blog.views | intcomma}}</small>
+            </div> -->
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <nav aria-label="Page navigation example">
+        {% if blogs.paginator.num_pages > 1 %}
+        <ul class="pagination justify-content-end">
+          {% for page in blogs.paginator.page_range %}
+          <li class="page-item"><a class="page-link" href="?page={{page}}">{{page}}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </nav>
+    </div>
+  </div>
+
+  {% endblock content %}
