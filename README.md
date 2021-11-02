@@ -2,5 +2,5 @@
 
 
 ## sql file is kasetinc-blogs.sql
-## more
+## other
 https://www.djangoproject.com/
